@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Home')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>Find Your Dream Job Abroad</h1>
+            <p>We connect skilled professionals with top international employers. Secure, transparent, and reliable recruitment services.</p>
+            <div style="margin-top: 2rem;">
+                <a href="/register" class="btn btn-accent btn-lg" style="font-size: 1.1rem; padding: 1rem 2rem;">Get Started Today</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Logout Message -->
+        <div th:if="${param.logout}" class="alert alert-success text-center">
+            You have been logged out successfully!
+        </div>
+
+        <!-- Search/Filter (Placeholder) -->
+        <div class="search-bar" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 3rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" placeholder="Job Title or Keyword" class="form-control" style="flex: 2;">
+            <select class="form-control" style="flex: 1;">
+                <option value="">All Countries</option>
+                <option value="UAE">UAE</option>
+                <option value="Qatar">Qatar</option>
+                <option value="Malaysia">Malaysia</option>
+            </select>
+            <button class="btn btn-primary" style="flex: 0 0 auto;">Search Jobs</button>
+        </div>
+
+        <h2 class="section-title" style="text-align: center; margin-bottom: 2rem; position: relative; padding-bottom: 1rem;">
+            Latest Opportunities
+            <span style="display: block; width: 60px; height: 3px; background: var(--accent-color); margin: 0.5rem auto 0;"></span>
+        </h2>
+
+        <div id="job-grid-react"></div>
+
+    </main>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69573cd00a00df198198e395/1jducb4k5';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="/js/home.js"></script>
+
+</body>
+</html>

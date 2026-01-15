@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('My Profile')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside th:replace="~{fragments/candidate-sidebar :: sidebar('profile')}"></aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="welcome-section mb-4">
+                <h2>My Profile</h2>
+                <p class="text-muted">Manage your personal and passport information.</p>
+            </div>
+
+            <!-- Alerts -->
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow);">
+                <div style="display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; margin-bottom: 2rem;">
+                    <div class="text-center">
+                        <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; margin: 0 auto; background: #f0f0f0; box-shadow: var(--shadow);">
+                            <img th:if="${candidate != null && candidate.profilePhotoPath != null}" th:src="@{${candidate.profilePhotoPath}}"
+                                 alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div th:unless="${candidate != null && candidate.profilePhotoPath != null}" 
+                                 style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                                <i class="fas fa-user" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                        <form th:action="@{/candidate/profile/photo}" method="post" enctype="multipart/form-data" style="margin-top: 1rem;">
+                            <input type="file" name="photo" accept="image/*" style="width: 100%; margin-bottom: 0.5rem;">
+                            <button type="submit" class="btn btn-secondary" style="width: 100%;">Change Photo</button>
+                        </form>
+                    </div>
+                    <div>
+                        <form action="/candidate/profile" method="post" th:object="${candidate}">
+                            
+                            <h4 style="border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: var(--primary-color);">Personal Information</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" th:field="*{fullName}" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" th:field="*{phone}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <input type="text" th:field="*{address}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" th:field="*{dateOfBirth}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nationality</label>
+                            <input type="text" th:field="*{nationality}" class="form-control">
+                        </div>
+                    </div>
+
+                    <h4 style="border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: var(--primary-color);">Passport Details</h4>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <div class="form-group">
+                            <label class="form-label">Passport Number</label>
+                            <input type="text" th:field="*{passportNumber}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Issue Date</label>
+                            <input type="date" th:field="*{passportIssueDate}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" th:field="*{passportExpiryDate}" class="form-control">
+                        </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 3rem;">Save Changes</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+</body>
+</html>

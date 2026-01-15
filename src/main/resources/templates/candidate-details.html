@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Details - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .info-row {
+            display: flex;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            width: 200px;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .status-NOT_UPLOADED {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .status-PENDING {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-IN_PROGRESS {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .status-APPROVED {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-REJECTED {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🚀 Manpower System - Admin Panel</div>
+            <div class="nav-links">
+                <a href="/admin/candidates">← Back to List</a>
+                <a href="/dashboard">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" th:if="${candidate}">
+        <!-- Personal Information -->
+        <div class="info-section">
+            <h2>Personal Information</h2>
+            <div class="info-row">
+                <div class="info-label">Full Name:</div>
+                <div class="info-value" th:text="${candidate.fullName ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Email:</div>
+                <div class="info-value" th:text="${candidate.email ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Phone:</div>
+                <div class="info-value" th:text="${candidate.phone ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Address:</div>
+                <div class="info-value" th:text="${candidate.address ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Date of Birth:</div>
+                <div class="info-value" th:text="${candidate.dateOfBirth ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Nationality:</div>
+                <div class="info-value" th:text="${candidate.nationality ?: 'Not provided'}">-</div>
+            </div>
+        </div>
+
+        <!-- Passport Information -->
+        <div class="info-section">
+            <h2>Passport Information</h2>
+            <div class="info-row">
+                <div class="info-label">Passport Number:</div>
+                <div class="info-value" th:text="${candidate.passportNumber ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Issue Date:</div>
+                <div class="info-value" th:text="${candidate.passportIssueDate ?: 'Not provided'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Expiry Date:</div>
+                <div class="info-value" th:text="${candidate.passportExpiryDate ?: 'Not provided'}">-</div>
+            </div>
+        </div>
+
+        <!-- Documents & Status Management -->
+        <div class="info-section">
+            <h2>Documents & Status Management</h2>
+            
+            <!-- Success/Error Messages -->
+            <div th:if="${success}" class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Passport -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Passport Photo</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.passportStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.passportStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.passportPhotoPath != null}" 
+                               th:href="@{${candidate.passportPhotoPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="passport">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.passportStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.passportStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.passportStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.passportStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.passportStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/passport(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="passportDocument" accept="image/*" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Passport
+                    </button>
+                </form>
+            </div>
+
+            <!-- Medical Report -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Medical Report</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.medicalStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.medicalStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.medicalReportPath != null}" 
+                               th:href="@{${candidate.medicalReportPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="medical">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.medicalStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.medicalStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.medicalStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.medicalStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.medicalStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/medical(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="medicalDocument" accept="application/pdf" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Medical
+                    </button>
+                </form>
+            </div>
+
+            <!-- Police Report -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Police Report</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.policeReportStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.policeReportStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.policeReportPath != null}" 
+                               th:href="@{${candidate.policeReportPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="police">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.policeReportStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.policeReportStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.policeReportStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.policeReportStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.policeReportStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/police(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="policeDocument" accept="application/pdf" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Police
+                    </button>
+                </form>
+            </div>
+
+            <!-- Health Report -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Health Report</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.healthReportStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.healthReportStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.healthReportPath != null}" 
+                               th:href="@{${candidate.healthReportPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="health">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.healthReportStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.healthReportStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.healthReportStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.healthReportStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.healthReportStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/health(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="healthDocument" accept="application/pdf" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Health
+                    </button>
+                </form>
+            </div>
+
+            <!-- Visa Document (Admin Upload) -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Visa Document</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.visaStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.visaStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.visaDocumentPath != null}" 
+                               th:href="@{${candidate.visaDocumentPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="visa">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.visaStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.visaStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.visaStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.visaStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.visaStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/visa(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="visaDocument" accept="application/pdf,image/*" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Visa
+                    </button>
+                </form>
+            </div>
+
+            <!-- Insurance Document (Admin Upload) -->
+            <div class="document-row" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="flex: 1;">
+                        <strong>Insurance Document</strong>
+                        <div style="margin-top: 0.5rem;">
+                            <span th:text="${candidate.insuranceStatus ?: 'NOT_UPLOADED'}" 
+                                  th:classappend="'status-badge status-' + ${candidate.insuranceStatus}">NOT_UPLOADED</span>
+                            <a th:if="${candidate.insuranceDocumentPath != null}" 
+                               th:href="@{${candidate.insuranceDocumentPath}}" 
+                               target="_blank" 
+                               class="btn-download" 
+                               style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 4px;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <form th:action="@{/admin/candidates/{id}/status(id=${candidate.id})}" method="post" style="display: flex; gap: 0.5rem;">
+                        <input type="hidden" name="statusType" value="insurance">
+                        <select name="statusValue" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="NOT_UPLOADED" th:selected="${candidate.insuranceStatus == 'NOT_UPLOADED'}">NOT_UPLOADED</option>
+                            <option value="PENDING" th:selected="${candidate.insuranceStatus == 'PENDING'}">PENDING</option>
+                            <option value="IN_PROGRESS" th:selected="${candidate.insuranceStatus == 'IN_PROGRESS'}">IN_PROGRESS</option>
+                            <option value="APPROVED" th:selected="${candidate.insuranceStatus == 'APPROVED'}">APPROVED</option>
+                            <option value="REJECTED" th:selected="${candidate.insuranceStatus == 'REJECTED'}">REJECTED</option>
+                        </select>
+                        <button type="submit" class="btn-update" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Update</button>
+                    </form>
+                </div>
+                <form th:action="@{/admin/candidates/{id}/documents/insurance(id=${candidate.id})}" method="post" enctype="multipart/form-data" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="file" name="insuranceDocument" accept="application/pdf,image/*" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn-upload" style="padding: 0.5rem 1rem; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-upload"></i> Upload Insurance
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Job Information -->
+        <div class="info-section">
+            <h2>Job Information</h2>
+            <div class="info-row">
+                <div class="info-label">Job Applied For:</div>
+                <div class="info-value" th:text="${candidate.jobAppliedFor ?: 'Not specified'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Destination Country:</div>
+                <div class="info-value" th:text="${candidate.destinationCountry ?: 'Not specified'}">-</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Remarks:</div>
+                <div class="info-value" th:text="${candidate.remarks ?: 'No remarks'}">-</div>
+            </div>
+        </div>
+
+        <!-- Status History Table -->
+        <div class="info-section">
+            <h2>Status History</h2>
+            <div th:if="${statusHistory != null and !statusHistory.isEmpty()}">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #ddd;">
+                            <th style="padding: 1rem; text-align: left;">Date & Time</th>
+                            <th style="padding: 1rem; text-align: left;">Document Type</th>
+                            <th style="padding: 1rem; text-align: left;">Old Status</th>
+                            <th style="padding: 1rem; text-align: left;">New Status</th>
+                            <th style="padding: 1rem; text-align: left;">Changed By</th>
+                            <th style="padding: 1rem; text-align: left;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="history : ${statusHistory}" style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 0.75rem;" th:text="${#temporals.format(history.changedAt, 'yyyy-MM-dd HH:mm')}">-</td>
+                            <td style="padding: 0.75rem; text-transform: capitalize;" th:text="${history.documentType}">-</td>
+                            <td style="padding: 0.75rem;">
+                                <span th:text="${history.oldStatus}" 
+                                      th:classappend="'status-badge status-' + ${history.oldStatus}">-</span>
+                            </td>
+                            <td style="padding: 0.75rem;">
+                                <span th:text="${history.newStatus}" 
+                                      th:classappend="'status-badge status-' + ${history.newStatus}">-</span>
+                            </td>
+                            <td style="padding: 0.75rem;" th:text="${history.changedBy}">-</td>
+                            <td style="padding: 0.75rem;" th:text="${history.remarks ?: '-'}">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${statusHistory == null or statusHistory.isEmpty()}" style="text-align: center; padding: 2rem; color: #999;">
+                <i class="fas fa-info-circle"></i> No status history available yet.
+            </div>
+        </div>
+
+        <a th:href="@{/admin/candidates/edit/{id}(id=${candidate.id})}" class="btn btn-primary">Edit Candidate</a>
+    </div>
+</body>
+</html>
+

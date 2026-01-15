@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('My Dashboard')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside th:replace="~{fragments/candidate-sidebar :: sidebar('dashboard')}"></aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="welcome-section mb-4">
+                <h2>My Dashboard</h2>
+                <p class="text-muted">Track your application status and progress.</p>
+            </div>
+
+            <!-- If Candidate Profile Exists -->
+            <div th:if="${candidate != null}">
+                
+                <!-- Progress Tracker -->
+                <div class="card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                        <i class="fas fa-tasks"></i> Application Progress
+                    </h3>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <!-- Profile Completion -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: #667eea; margin-right: 1rem;"></i>
+                                    <strong>Profile</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.fullName != null and candidate.email != null and candidate.phone != null} ? 'status-completed' : 'status-pending'"
+                                          th:text="${candidate.fullName != null and candidate.email != null and candidate.phone != null} ? '✅ Completed' : '⏳ Pending'">⏳ Pending</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Passport -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-id-card" style="font-size: 1.5rem; color: #17a2b8; margin-right: 1rem;"></i>
+                                    <strong>Passport</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.passportStatus == 'APPROVED'} ? 'status-completed' : (${candidate.passportStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.passportStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.passportStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.passportStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.passportStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '❌ Not Uploaded'))">❌ Not Uploaded</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Report -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-file-medical" style="font-size: 1.5rem; color: #28a745; margin-right: 1rem;"></i>
+                                    <strong>Medical Report</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.medicalStatus == 'APPROVED'} ? 'status-completed' : (${candidate.medicalStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.medicalStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.medicalStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.medicalStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.medicalStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '❌ Not Uploaded'))">❌ Not Uploaded</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Police Report -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #dc3545;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-file-contract" style="font-size: 1.5rem; color: #dc3545; margin-right: 1rem;"></i>
+                                    <strong>Police Report</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.policeReportStatus == 'APPROVED'} ? 'status-completed' : (${candidate.policeReportStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.policeReportStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.policeReportStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.policeReportStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.policeReportStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '❌ Not Uploaded'))">❌ Not Uploaded</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Health Report -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-heartbeat" style="font-size: 1.5rem; color: #ffc107; margin-right: 1rem;"></i>
+                                    <strong>Health Report</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.healthReportStatus == 'APPROVED'} ? 'status-completed' : (${candidate.healthReportStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.healthReportStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.healthReportStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.healthReportStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.healthReportStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '❌ Not Uploaded'))">❌ Not Uploaded</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visa -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #6f42c1;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-passport" style="font-size: 1.5rem; color: #6f42c1; margin-right: 1rem;"></i>
+                                    <strong>Visa</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.visaStatus == 'APPROVED'} ? 'status-completed' : (${candidate.visaStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.visaStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.visaStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.visaStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.visaStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '⏳ Pending'))">⏳ Pending</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Insurance -->
+                        <div class="progress-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #20c997;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-shield-alt" style="font-size: 1.5rem; color: #20c997; margin-right: 1rem;"></i>
+                                    <strong>Insurance</strong>
+                                </div>
+                                <div style="margin-left: 3rem;">
+                                    <span class="status-badge" 
+                                          th:classappend="${candidate.insuranceStatus == 'APPROVED'} ? 'status-completed' : (${candidate.insuranceStatus == 'REJECTED'} ? 'status-rejected' : (${candidate.insuranceStatus == 'IN_PROGRESS'} ? 'status-processing' : 'status-not-uploaded'))"
+                                          th:text="${candidate.insuranceStatus == 'APPROVED'} ? '✅ Approved' : (${candidate.insuranceStatus == 'REJECTED'} ? '❌ Rejected' : (${candidate.insuranceStatus == 'IN_PROGRESS'} ? '⏳ Processing' : '⏳ Pending'))">⏳ Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Quick Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <a href="/candidate/profile" class="btn-action" style="padding: 1rem; background: #667eea; color: white; text-decoration: none; border-radius: 8px; text-align: center;">
+                            <i class="fas fa-user-edit"></i> Update Profile
+                        </a>
+                        <a href="/candidate/documents" class="btn-action" style="padding: 1rem; background: #28a745; color: white; text-decoration: none; border-radius: 8px; text-align: center;">
+                            <i class="fas fa-upload"></i> Upload Documents
+                        </a>
+                        <a href="/candidate/jobs" class="btn-action" style="padding: 1rem; background: #17a2b8; color: white; text-decoration: none; border-radius: 8px; text-align: center;">
+                            <i class="fas fa-briefcase"></i> View Jobs
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Application Details -->
+                <div class="card" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h3 style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem;">Application Details</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                        <div>
+                            <p class="text-muted mb-1">Passport Number</p>
+                            <p class="font-weight-bold" th:text="${candidate.passportNumber != null ? candidate.passportNumber : 'Not Set'}">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Job Applied For</p>
+                            <p class="font-weight-bold" th:text="${candidate.jobAppliedFor != null ? candidate.jobAppliedFor : 'General Application'}">General</p>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Destination Country</p>
+                            <p class="font-weight-bold" th:text="${candidate.destinationCountry != null ? candidate.destinationCountry : 'Not Set'}">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Full Name</p>
+                            <p class="font-weight-bold" th:text="${candidate.fullName != null ? candidate.fullName : 'Not Set'}">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Email</p>
+                            <p class="font-weight-bold" th:text="${candidate.email != null ? candidate.email : 'Not Set'}">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-1">Phone</p>
+                            <p class="font-weight-bold" th:text="${candidate.phone != null ? candidate.phone : 'Not Set'}">N/A</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- No Data Message -->
+            <div class="no-data text-center mt-5" th:if="${candidate == null}">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <h2>Profile Not Found</h2>
+                <p>Your profile is being set up. Please contact the administrator.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <style>
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-not-uploaded {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            transition: all 0.3s;
+        }
+    </style>
+
+</body>
+</html>
