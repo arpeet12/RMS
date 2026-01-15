@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('About Us')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <!-- Header -->
+    <div class="hero" style="padding: 3rem 2rem; margin-bottom: 2rem;">
+        <div class="container">
+            <h1>About Global Recruit</h1>
+            <p>Your trusted partner in ethical and professional foreign employment services.</p>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 4rem;">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 1.5rem;">Who We Are</h2>
+                    <p style="margin-bottom: 1rem;">Global Recruit is a leading manpower recruitment agency dedicated to connecting skilled professionals with prestigious international employers. Established with a vision to provide transparent and reliable recruitment services, we have successfully placed thousands of candidates in countries across the Middle East, Southeast Asia, and Europe.</p>
+                    <p>Our team consists of industry experts who understand the nuances of international labor laws, visa processing, and candidate welfare, ensuring a smooth transition for every job seeker.</p>
+                </div>
+                <div>
+                    <img src="https://via.placeholder.com/600x400?text=About+Us+Image" alt="About Us" style="width: 100%; border-radius: 8px; box-shadow: var(--shadow);">
+                </div>
+            </div>
+
+            <div class="mission-vision" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); border-top: 4px solid var(--primary-color);">
+                    <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h3>Our Mission</h3>
+                    <p>To empower individuals by providing them with life-changing career opportunities abroad while ensuring their safety, dignity, and professional growth.</p>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); border-top: 4px solid var(--accent-color);">
+                    <i class="fas fa-eye" style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
+                    <h3>Our Vision</h3>
+                    <p>To be the most trusted and ethical global recruitment partner, recognized for excellence in service and commitment to human values.</p>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); border-top: 4px solid var(--success);">
+                    <i class="fas fa-handshake" style="font-size: 2rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h3>Our Values</h3>
+                    <p>Integrity, Transparency, Excellence, and Respect for every individual we serve.</p>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-bottom: 4rem;">
+                <h2>Why Choose Us?</h2>
+                <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <div style="text-align: center; max-width: 200px;">
+                        <div style="width: 60px; height: 60px; background: #eee; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.5rem;"><i class="fas fa-check-circle"></i></div>
+                        <h4>Government Licensed</h4>
+                        <p style="font-size: 0.9rem; color: #666;">Fully licensed by the Department of Foreign Employment.</p>
+                    </div>
+                    <div style="text-align: center; max-width: 200px;">
+                        <div style="width: 60px; height: 60px; background: #eee; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.5rem;"><i class="fas fa-user-tie"></i></div>
+                        <h4>Expert Team</h4>
+                        <p style="font-size: 0.9rem; color: #666;">Decades of combined experience in recruitment.</p>
+                    </div>
+                    <div style="text-align: center; max-width: 200px;">
+                        <div style="width: 60px; height: 60px; background: #eee; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.5rem;"><i class="fas fa-globe"></i></div>
+                        <h4>Global Network</h4>
+                        <p style="font-size: 0.9rem; color: #666;">Strong partnerships in UAE, Qatar, Malaysia, and more.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+
+</body>
+</html>

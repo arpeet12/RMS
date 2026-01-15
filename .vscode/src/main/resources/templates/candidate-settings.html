@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Settings')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside th:replace="~{fragments/candidate-sidebar :: sidebar('settings')}"></aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="welcome-section mb-4">
+                <h2>Account Settings</h2>
+                <p class="text-muted">Manage your account preferences and security.</p>
+            </div>
+
+            <div class="card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); max-width: 600px;">
+                <h4 style="border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: var(--primary-color);">Change Password</h4>
+                
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" class="form-control" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-control" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" placeholder="Confirm new password">
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary">Update Password</button>
+                </form>
+
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee;">
+                    <h4 style="color: var(--danger); margin-bottom: 1rem;">Danger Zone</h4>
+                    <p class="text-muted mb-3" style="font-size: 0.9rem;">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button class="btn btn-secondary" style="border-color: var(--danger); color: var(--danger); background: white;">Delete Account</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

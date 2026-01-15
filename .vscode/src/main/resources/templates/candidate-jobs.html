@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Applied Jobs')}"></head>
+<body>
+
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside th:replace="~{fragments/candidate-sidebar :: sidebar('jobs')}"></aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="welcome-section mb-4">
+                <h2>Applied Jobs</h2>
+                <p class="text-muted">Track the status of your job applications.</p>
+            </div>
+
+            <!-- Current Application (Based on Candidate Entity) -->
+            <div class="card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow);">
+                <div th:if="${candidate.jobAppliedFor != null && !candidate.jobAppliedFor.isEmpty()}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                        <div>
+                            <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;" th:text="${candidate.jobAppliedFor}">Job Title</h3>
+                            <p class="text-muted"><i class="fas fa-map-marker-alt"></i> <span th:text="${candidate.destinationCountry}">Country</span></p>
+                        </div>
+                        <span class="badge" 
+                              style="background: #eef2ff; color: var(--primary-color); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+                            Active Application
+                        </span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; background: #f9f9f9; padding: 1.5rem; border-radius: 8px;">
+                        <div>
+                            <small class="text-muted">Visa Status</small>
+                            <p class="font-weight-bold" th:text="${candidate.visaStatus ?: 'Pending'}" 
+                               th:classappend="${candidate.visaStatus == 'APPROVED'} ? 'text-success' : 'text-warning'"></p>
+                        </div>
+                        <div>
+                            <small class="text-muted">Medical Status</small>
+                            <p class="font-weight-bold" th:text="${candidate.medicalStatus ?: 'Pending'}"
+                               th:classappend="${candidate.medicalStatus == 'PASSED'} ? 'text-success' : 'text-warning'"></p>
+                        </div>
+                        <div>
+                            <small class="text-muted">Insurance</small>
+                            <p class="font-weight-bold" th:text="${candidate.insuranceStatus ?: 'Pending'}"
+                               th:classappend="${candidate.insuranceStatus == 'DONE'} ? 'text-success' : 'text-warning'"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:unless="${candidate.jobAppliedFor != null && !candidate.jobAppliedFor.isEmpty()}" class="text-center" style="padding: 3rem;">
+                    <i class="fas fa-briefcase" style="font-size: 3rem; color: #eee; margin-bottom: 1rem;"></i>
+                    <h3>No Active Applications</h3>
+                    <p class="text-muted mb-4">You haven't applied for any specific job yet.</p>
+                    <a href="/jobs" class="btn btn-primary">Browse Jobs</a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

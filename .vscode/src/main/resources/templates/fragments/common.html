@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - Manpower System'">Manpower System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Font Awesome (Optional for icons, using CDN for now) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navbar Fragment -->
+    <nav class="navbar" th:fragment="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <i class="fas fa-globe-asia"></i>
+                Global Recruit
+            </a>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link" th:classappend="${activeLink == 'home'} ? 'active'">Home</a>
+                <a href="/jobs" class="nav-link" th:classappend="${activeLink == 'jobs'} ? 'active'">Jobs</a>
+                <a href="/about" class="nav-link" th:classappend="${activeLink == 'about'} ? 'active'">About Us</a>
+                <a href="/contact" class="nav-link" th:classappend="${activeLink == 'contact'} ? 'active'">Contact</a>
+
+                <!-- Authenticated Links -->
+                <div sec:authorize="isAuthenticated()" class="nav-item">
+                     <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                     <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-left: 0.5rem;">Logout</button>
+                     </form>
+                </div>
+
+                <!-- Anonymous Links -->
+                <div sec:authorize="isAnonymous()" class="nav-item" style="display: flex; gap: 0.5rem;">
+                    <a href="/login" class="btn btn-secondary">Login</a>
+                    <a href="/register" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer Fragment -->
+    <footer class="footer" th:fragment="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Global Recruit</h3>
+                <p>Connecting talent with opportunity worldwide. Your trusted partner in foreign employment.</p>
+                <div class="social-links mt-3">
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+            </div>
+            
+            <div class="footer-section footer-links">
+                <h3>Quick Links</h3>
+                <a href="/">Home</a>
+                <a href="/jobs">Browse Jobs</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Support</a>
+            </div>
+            
+            <div class="footer-section footer-links">
+                <h3>For Candidates</h3>
+                <a href="/register">Register Profile</a>
+                <a href="/dashboard">Check Status</a>
+                <a href="#">Visa Information</a>
+                <a href="#">Safety Guidelines</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</p>
+                <p><i class="fas fa-phone"></i> +977-1-4XXXXXX</p>
+                <p><i class="fas fa-envelope"></i> info@globalrecruit.com</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Global Recruit Manpower. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

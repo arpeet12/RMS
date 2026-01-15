@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inventory PDF</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body{
+  font-family: Arial;
+  background:#e6e6e6;
+  padding:20px;
+}
+
+/* REAL A4 SIZE */
+#page{
+  width:794px;
+  min-height:1123px;
+  background:#ffffff;
+  margin:auto;
+  padding:30px;
+  box-sizing:border-box;
+  border:1px solid #aaa;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  border:2px solid black;
+  padding:8px;
+  text-align:center;
+  vertical-align:middle;
+}
+
+th{
+  font-weight:bold;
+  font-size:16px;
+}
+
+/* Bigger images */
+img{
+  width:160px;
+  height:120px;
+  object-fit:cover;
+  display:block;
+  margin:auto;
+}
+
+/* hide file input in pdf */
+input[type=file]{
+  font-size:11px;
+}
+
+.controls{
+  margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="controls">
+  Header 1: <input id="h1" value="PARDA">
+  Header 2: <input id="h2" value="QUANTITY">
+  Header 3: <input id="h3" value="OUT">
+  Header 4: <input id="h4" value="BALANCE">
+
+  <br><br>
+
+  <button onclick="updateHeaders()">Update Headers</button>
+  <button onclick="downloadPDF()">Download A4 PDF</button>
+</div>
+
+
+<div id="page">
+<table>
+<thead>
+<tr>
+  <th id="th1">PARDA</th>
+  <th id="th2">QUANTITY</th>
+  <th id="th3">OUT</th>
+  <th id="th4">BALANCE</th>
+</tr>
+</thead>
+
+<tbody id="rows"></tbody>
+
+</table>
+</div>
+
+
+<script>
+function updateHeaders(){
+  th1.innerText=h1.value;
+  th2.innerText=h2.value;
+  th3.innerText=h3.value;
+  th4.innerText=h4.value;
+}
+
+const rows=document.getElementById("rows");
+
+// ---- CREATE EXACTLY 8 ROWS ----
+for(let i=0;i<8;i++){
+  let tr=document.createElement("tr");
+
+  tr.innerHTML=`
+    <td>
+      <img>
+      <br>
+      <input type="file" accept="image/*" onchange="showImg(event,this)">
+    </td>
+
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+    <td contenteditable="true"></td>
+  `;
+
+  rows.appendChild(tr);
+}
+
+// load image properly
+function showImg(e,input){
+  let img=input.parentNode.querySelector("img");
+
+  let reader=new FileReader();
+  reader.onload=function(r){
+    img.src=r.target.result;
+  }
+  reader.readAsDataURL(e.target.files[0]);
+}
+
+// wait helper
+async function wait(ms){
+  return new Promise(r=>setTimeout(r,ms));
+}
+
+async function downloadPDF(){
+
+  // Wait so images fully load
+  await wait(500);
+
+  // hide inputs in pdf
+  document.querySelectorAll("input[type=file]").forEach(el=>{
+    el.style.display="none";
+  });
+
+  const element=document.getElementById("page");
+
+  html2pdf().set({
+    filename:"inventory.pdf",
+    html2canvas:{
+      scale:2,
+      useCORS:true
+    },
+    jsPDF:{
+      unit:"px",
+      format:[794,1123],
+      orientation:"portrait"
+    }
+  }).from(element).save().then(()=>{
+
+    // show inputs again for editing
+    document.querySelectorAll("input[type=file]").forEach(el=>{
+      el.style.display="block";
+    });
+
+  });
+}
+</script>
+
+</body>
+</html>
